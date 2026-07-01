@@ -1,0 +1,79 @@
+package policyflow.service.policy
+
+uses policyflow.domain.policy.Policy
+uses policyflow.domain.policy.PolicyStatus
+uses policyflow.domain.policy.PolicyType
+uses java.time.LocalDate
+uses java.util.List
+uses java.util.UUID
+
+/**
+ * Service interface for managing Policy aggregate lifecycles and transactions.
+ */
+public interface PolicyService {
+  /**
+   * Validates and creates a new Policy.
+   * Assures that linked Contact and Vehicle exist, and checks active policy limits on vehicles.
+   * 
+   * @param policy The policy to create.
+   * @return The created policy instance.
+   * @throws IllegalArgumentException if references are missing or vehicle active policy limit is breached.
+   * @throws policyflow.validation.ValidationException if validation rules fail.
+   */
+  public function createPolicy(policy : Policy) : Policy
+
+  /**
+   * Retrieves a policy by its unique UUID.
+   * 
+   * @param id The unique identifier of the policy.
+   * @return The policy if found, null otherwise.
+   */
+  public function getPolicy(id : UUID) : Policy
+
+  /**
+   * Retrieves a policy by its unique PolicyNumber.
+   * 
+   * @param policyNumber The policy number to search.
+   * @return The policy if found, null otherwise.
+   */
+  public function getPolicyByNumber(policyNumber : String) : Policy
+
+  /**
+   * Returns a list of all policies.
+   * 
+   * @return A list of all policies.
+   */
+  public function getAllPolicies() : List<Policy>
+
+  /**
+   * Validates and updates an existing Policy.
+   * Ensures linked Contact and Vehicle exist, and checks active policy limits on vehicles.
+   * 
+   * @param policy The policy to update.
+   * @return The updated policy instance.
+   * @throws IllegalArgumentException if the policy is not found or validation checks fail.
+   */
+  public function updatePolicy(policy : Policy) : Policy
+
+  /**
+   * Cancels an active or draft policy.
+   * Sets status to CANCELLED and requires a date and reason.
+   * 
+   * @param id The unique identifier of the policy.
+   * @param cancellationDate The date of cancellation.
+   * @param reason The reason for cancellation.
+   * @throws IllegalArgumentException if policy not found, date/reason is empty or invalid.
+   */
+  public function cancelPolicy(id : UUID, cancellationDate : LocalDate, reason : String) : void
+
+  /**
+   * Searches policies by policy number, status, and/or policy type.
+   * Filters are applied as an AND condition if multiple criteria are present.
+   * 
+   * @param policyNumberQuery The policy number query (optional).
+   * @param statusFilter The policy status filter (optional).
+   * @param typeFilter The policy type filter (optional).
+   * @return A list of matching policies.
+   */
+  public function searchPolicies(policyNumberQuery : String, statusFilter : PolicyStatus, typeFilter : PolicyType) : List<Policy>
+}

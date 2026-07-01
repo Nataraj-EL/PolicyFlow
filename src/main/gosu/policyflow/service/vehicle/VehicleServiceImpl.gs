@@ -39,8 +39,8 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     // Duplicate VIN check
-    var existingVin = _repository.findByVin(vehicle.VIN)
-    if (existingVin != null) {
+    var duplicateVin = findDuplicateVin(vehicle.VIN, null)
+    if (duplicateVin) {
       throw new IllegalArgumentException("VIN already in use: " + vehicle.VIN)
     }
 
@@ -95,8 +95,8 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     // Duplicate VIN check (excluding current vehicle)
-    var duplicateVin = _repository.findByVin(vehicle.VIN)
-    if (duplicateVin != null && !duplicateVin.ID.equals(vehicle.ID)) {
+    var duplicateVin = findDuplicateVin(vehicle.VIN, vehicle.ID)
+    if (duplicateVin) {
       throw new IllegalArgumentException("VIN already in use: " + vehicle.VIN)
     }
 
@@ -164,6 +164,26 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     return results
+  }
+
+  /**
+   * Helper function to detect duplicate VIN usage.
+   * 
+   * @param vin VIN to search.
+   * @param excludeId ID to exclude from match (for updates).
+   * @return true if duplicate VIN is found, false otherwise.
+   */
+  private function findDuplicateVin(vin : String, excludeId : UUID) : boolean {
+    var cleanVin = vin.trim().toLowerCase()
+    for (v in _repository.findAll()) {
+      if (excludeId == null || !v.ID.equals(excludeId)) {
+        var currentVin = v.VIN ?: ""
+        if (currentVin.trim().toLowerCase().equals(cleanVin)) {
+          return true
+        }
+      }
+    }
+    return false
   }
 
   /**

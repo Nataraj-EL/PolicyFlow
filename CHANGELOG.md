@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-07-01
+
+### Added
+- Domain Layer: Implemented `Policy` contract aggregate using `java.time.LocalDate` for dates. Added `PolicyType` and `PolicyStatus` enums. Auto-generated read-only `PolicyNumber` and UUID `ID` properties at construction.
+- Repository Layer: Added `PolicyRepository` and `InMemoryPolicyRepository` supporting operations like finding by vehicle ID and policy number.
+- Validation Layer: Created `PolicyValidator` to validate date limits (expiration after effective), required parameters, and cancellation properties (which are mandatory only for cancelled policies).
+- Service Layer: Created `PolicyService` and `PolicyServiceImpl` supporting policy CRUD, searches, cancellations, aggregate existence validations (against contacts and vehicles), and vehicle active policy limits.
+- Test Suite: Implemented `PolicyServiceTest` unit tests verifying CRUD, cancellations, validation edge cases, and uniqueness constraints.
+
 ## [0.3.0] - 2026-07-01
 
 ### Added
