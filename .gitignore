@@ -1,0 +1,17 @@
+# Maven build output
+target/
+
+# IDE configurations
+.idea/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+
+# Private PwC Interview Journal (Crucial: DO NOT COMMIT)
+PolicyFlow_Interview_Journal.md
+
+# Log files
+*.log
