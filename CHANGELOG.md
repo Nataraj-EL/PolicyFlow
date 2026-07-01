@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-07-01
+
+### Added
+- Domain Layer: Added the `PolicyTransactionType` enum and the `PolicyHistoryEntry` audit trail model. Modified `Policy` to support a `PreviousPolicyId` linkage.
+- Repository Layer: Added `PolicyHistoryRepository` and `InMemoryPolicyHistoryRepository` interfaces and implementations.
+- Service Layer: Updated `PolicyService` and `PolicyServiceImpl` with methods for policy renewals (generating new policy numbers and linking back via `PreviousPolicyId`), expirations, reinstatements (retaining cancellation date and reason fields), endorsements, and transaction history retrieval.
+- Test Suite: Updated `PolicyServiceTest` with cases verifying renewals, expirations, reinstatements, endorsements, and transition audit trail tracking.
+
 ## [0.5.0] - 2026-07-01
 
 ### Added

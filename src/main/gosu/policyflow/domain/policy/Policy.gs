@@ -19,6 +19,7 @@ public class Policy {
   private var _expirationDate : LocalDate as ExpirationDate
   private var _cancellationDate : LocalDate as CancellationDate
   private var _cancellationReason : String as CancellationReason
+  private var _previousPolicyId : UUID as PreviousPolicyId
 
   /**
    * Constructs a Policy, auto-generating the unique ID and immutable PolicyNumber.
