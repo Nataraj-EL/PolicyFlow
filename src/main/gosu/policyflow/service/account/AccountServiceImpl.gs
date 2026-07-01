@@ -7,9 +7,17 @@ uses policyflow.validation.AccountValidator
 uses policyflow.validation.ValidationException
 uses java.util.List
 
+/**
+ * Service implementation for managing customer Account lifecycle workflows.
+ */
 public class AccountServiceImpl implements AccountService {
   private var _repository : AccountRepository
 
+  /**
+   * Constructs the service with its repository dependency.
+   * 
+   * @param repository Data access repository for accounts.
+   */
   public construct(repository : AccountRepository) {
     if (repository == null) {
       throw new IllegalArgumentException("AccountRepository cannot be null")

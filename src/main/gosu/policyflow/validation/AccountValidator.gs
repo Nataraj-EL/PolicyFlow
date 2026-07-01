@@ -1,12 +1,20 @@
 package policyflow.validation
 
 uses policyflow.domain.account.Account
-uses policyflow.domain.account.Contact
-uses policyflow.domain.account.ContactType
 uses policyflow.domain.account.Address
 
+/**
+ * Validator class for enforcing customer Account domain invariants.
+ */
 public class AccountValidator {
   
+  /**
+   * Validates an Account entity's state, returning errors or warnings.
+   * Delegates contact-level validations to {@link ContactValidator}.
+   * 
+   * @param account The account to validate.
+   * @return A ValidationResult containing validation feedback.
+   */
   public static function validate(account : Account) : ValidationResult {
     var result = new ValidationResult()
     
@@ -35,7 +43,13 @@ public class AccountValidator {
       result.addError("Account must have at least one contact.")
     } else {
       for (contact in account.Contacts) {
-        validateContact(contact, result)
+        var contactResult = ContactValidator.validate(contact)
+        for (err in contactResult.Errors) {
+          result.addError(err)
+        }
+        for (warn in contactResult.Warnings) {
+          result.addWarning(warn)
+        }
       }
     }
 
@@ -50,41 +64,13 @@ public class AccountValidator {
     return result
   }
 
-  private static function validateContact(contact : Contact, result : ValidationResult) {
-    if (contact.ContactType == null) {
-      result.addError("Contact type is required.")
-      return
-    }
-
-    if (contact.ContactType == ContactType.PERSON) {
-      if (contact.FirstName == null || contact.FirstName.trim().isEmpty()) {
-        result.addError("First name is required for contact: " + contact.DisplayName)
-      }
-      if (contact.LastName == null || contact.LastName.trim().isEmpty()) {
-        result.addError("Last name is required for contact: " + contact.DisplayName)
-      }
-    } else if (contact.ContactType == ContactType.COMPANY) {
-      if (contact.CompanyName == null || contact.CompanyName.trim().isEmpty()) {
-        result.addError("Company name is required.")
-      }
-    }
-
-    // Email format validation (simple regex check)
-    var email = contact.EmailAddress
-    if (email != null && !email.trim().isEmpty()) {
-      if (!email.contains("@") || !email.contains(".")) {
-        result.addError("Invalid email address format: " + email + " for contact " + contact.DisplayName)
-      }
-    }
-
-    // Primary address for contact
-    if (contact.PrimaryAddress == null) {
-      result.addError("Primary address is required for contact: " + contact.DisplayName)
-    } else {
-      validateAddress(contact.PrimaryAddress, "Primary Address of contact " + contact.DisplayName, result)
-    }
-  }
-
+  /**
+   * Helper function to validate completeness of an Address value object.
+   * 
+   * @param address The address value object to check.
+   * @param context Context string for error messaging.
+   * @param result Staging validation results collector.
+   */
   private static function validateAddress(address : Address, context : String, result : ValidationResult) {
     if (address.AddressLine1 == null || address.AddressLine1.trim().isEmpty()) {
       result.addError(context + ": Address Line 1 is required.")
