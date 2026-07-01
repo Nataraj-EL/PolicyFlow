@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-07-01
+
+### Added
+- Domain Layer: Implemented `Vehicle` risk entity with a read-only `java.util.UUID` ID, `VIN`, `Make`, `Model`, `ManufactureYear`, and other fields. Added body style (`VehicleType`) and power engine (`FuelType`) enums, with complete KDoc comments.
+- Repository Layer: Added `VehicleRepository` and its map-backed implementation `InMemoryVehicleRepository` for CRUD operations.
+- Validation Layer: Created `VehicleValidator` to enforce a 17-character alphanumeric VIN, Make/Model presence, and valid year ranges.
+- Service Layer: Created `VehicleService` and `VehicleServiceImpl` providing CRUD operations, duplicate checking (for VIN and License Plates), and search (by Make, Model, and VehicleType).
+- Test Suite: Implemented `VehicleServiceTest` unit tests to assert CRUD, unique constraint, search, and validation behaviors.
+
 ## [0.2.0] - 2026-07-01
 
 ### Added
