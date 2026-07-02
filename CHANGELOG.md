@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-07-02
+
+### Added
+- Domain Layer: Introduced `Claim` aggregate entity, `ClaimStatus` enum, `ClaimType` enum, `ClaimTransactionType` enum, and the `ClaimHistoryEntry` audit trail model.
+- Repository Layer: Added `ClaimRepository`, `ClaimHistoryRepository` and their thread-safe in-memory map implementations.
+- Validation Layer: Created `ClaimValidator` to validate claim invariants, verifying dates are not in the future and loss dates occur on or before reported dates.
+- Service Layer: Created `ClaimService` and `ClaimServiceImpl` supporting filing, updating, closing, and searching claims. Enforces that claims can only be filed against `IN_FORCE` policies, that loss dates fall within active policy term ranges, that closed claims cannot be updated, and that claim numbers are globally unique.
+- Test Suite: Implemented `ClaimServiceTest` unit tests verifying creation, updates, closed protection, uniqueness checks, and history audit records.
+
 ## [0.6.0] - 2026-07-01
 
 ### Added
