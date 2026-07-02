@@ -9,7 +9,7 @@ uses java.math.BigDecimal
  * Sets the baseline premium for policy calculations.
  */
 public class BasePremiumRule implements RatingRule {
-  private static final var DEFAULT_BASE = new BigDecimal("500.00")
+  private static final var DEFAULT_BASE = policyflow.common.config.PolicyFlowConfig.BASE_PREMIUM_COMMERCIAL_AUTO
   private var _baseValue : BigDecimal
 
   /**

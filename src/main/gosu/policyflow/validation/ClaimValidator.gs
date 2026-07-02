@@ -39,7 +39,7 @@ public class ClaimValidator {
     // 2. Date Validations
     var loss = claim.LossDate
     var reported = claim.ReportedDate
-    var today = LocalDate.now()
+    var today = policyflow.common.time.ClockProvider.nowLocalDate()
 
     if (loss == null) {
       result.addError("Loss Date is required.")

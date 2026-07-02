@@ -158,15 +158,7 @@ public class ContactServiceImpl implements ContactService {
    * @return true if duplicate email is found, false otherwise.
    */
   private function findDuplicateEmail(email : String, excludeId : UUID) : boolean {
-    var cleanEmail = email.trim().toLowerCase()
-    for (c in _repository.findAll()) {
-      if (excludeId == null || !c.ID.equals(excludeId)) {
-        var currentEmail = c.EmailAddress ?: ""
-        if (currentEmail.trim().toLowerCase().equals(cleanEmail)) {
-          return true
-        }
-      }
-    }
-    return false
+    var c = _repository.findByEmail(email)
+    return c != null && (excludeId == null || !c.ID.equals(excludeId))
   }
 }

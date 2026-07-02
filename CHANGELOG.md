@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-07-02
+
+### Added
+- Time Virtualization: Introduced `ClockProvider` to centralize and mock `LocalDate` and `LocalDateTime` accesses for deterministic test suites.
+- Common Exception Hierarchy: Introduced unchecked base exception `PolicyFlowException` (extending `RuntimeException`), along with `EntityNotFoundException` and `BusinessRuleException` subclasses. Refactored `ValidationException` to extend `PolicyFlowException`. Created `ExceptionFormatter` to serialize clean error summaries.
+- Config/Constants Management: Introduced `PolicyFlowConfig` central config, refactoring rating rules (`BasePremiumRule`, `StateTaxRule`) to load values from config.
+- Logging: Created `StructuredLogger` logging key-value context objects into formatted JSON outputs.
+- Dependency Bootstrap Container: Created `AppContainer` DI registry compiling singletons of all repos and services.
+- Minimal Input Sanitization: Created `SanitizationUtil` supplying trimmed, lowercased emails, and spacing normalizations.
+- Performance Tuning: Implemented O(1) concurrent secondary lookups in repositories.
+
 ## [0.8.0] - 2026-07-02
 
 ### Added

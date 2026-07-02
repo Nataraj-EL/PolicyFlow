@@ -10,7 +10,7 @@ uses java.math.RoundingMode
  * Calculates state taxes based on accumulated premium subtotal.
  */
 public class StateTaxRule implements RatingRule {
-  private static final var DEFAULT_TAX_RATE = new BigDecimal("0.08") // 8%
+  private static final var DEFAULT_TAX_RATE = policyflow.common.config.PolicyFlowConfig.DEFAULT_STATE_TAX_RATE
   private var _taxRate : BigDecimal
 
   /**

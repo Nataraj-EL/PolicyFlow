@@ -8,9 +8,11 @@ uses java.util.concurrent.ConcurrentHashMap
 
 /**
  * Thread-safe in-memory database implementation of {@link ClaimRepository}.
+ * Employs a secondary index for fast O(1) ClaimNumber lookups.
  */
 public class InMemoryClaimRepository implements ClaimRepository {
   private var _db : ConcurrentHashMap<UUID, Claim> = new ConcurrentHashMap<UUID, Claim>()
+  private var _numberIndex = new ConcurrentHashMap<String, Claim>()
 
   override function save(claim : Claim) : Claim {
     if (claim == null) {
@@ -19,7 +21,19 @@ public class InMemoryClaimRepository implements ClaimRepository {
     if (claim.ID == null) {
       throw new IllegalArgumentException("Claim ID cannot be null")
     }
+
+    // Clean old index if updating
+    var existing = _db.get(claim.ID)
+    if (existing != null && existing.ClaimNumber != null) {
+      _numberIndex.remove(existing.ClaimNumber.trim().toLowerCase())
+    }
+
     _db.put(claim.ID, claim)
+
+    if (claim.ClaimNumber != null && !claim.ClaimNumber.trim().isEmpty()) {
+      _numberIndex.put(claim.ClaimNumber.trim().toLowerCase(), claim)
+    }
+
     return claim
   }
 
@@ -34,14 +48,7 @@ public class InMemoryClaimRepository implements ClaimRepository {
     if (claimNumber == null || claimNumber.trim().isEmpty()) {
       return null
     }
-    var cleanNumber = claimNumber.trim().toLowerCase()
-    for (c in _db.values()) {
-      var currentNumber = c.ClaimNumber ?: ""
-      if (currentNumber.trim().toLowerCase().equals(cleanNumber)) {
-        return c
-      }
-    }
-    return null
+    return _numberIndex.get(claimNumber.trim().toLowerCase())
   }
 
   override function findByPolicyId(policyId : UUID) : List<Claim> {
@@ -62,12 +69,17 @@ public class InMemoryClaimRepository implements ClaimRepository {
   }
 
   override function delete(id : UUID) {
-    if (id != null) {
-      _db.remove(id)
+    if (id == null) {
+      return
+    }
+    var existing = _db.remove(id)
+    if (existing != null && existing.ClaimNumber != null) {
+      _numberIndex.remove(existing.ClaimNumber.trim().toLowerCase())
     }
   }
 
   override function clear() {
     _db.clear()
+    _numberIndex.clear()
   }
 }

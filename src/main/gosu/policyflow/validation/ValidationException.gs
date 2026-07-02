@@ -1,13 +1,13 @@
 package policyflow.validation
 
-uses java.lang.RuntimeException
+uses policyflow.common.exception.PolicyFlowException
 uses java.util.List
 
 /**
  * Custom runtime exception thrown when domain validation rules are violated.
  * Carries structured error messages.
  */
-public class ValidationException extends RuntimeException {
+public class ValidationException extends PolicyFlowException {
   private var _errors : List<String> as readonly Errors
 
   /**

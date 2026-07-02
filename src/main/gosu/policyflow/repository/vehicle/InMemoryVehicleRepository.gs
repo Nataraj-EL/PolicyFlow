@@ -8,9 +8,12 @@ uses java.util.UUID
 
 /**
  * Concurrent map-backed implementation of {@link VehicleRepository} for in-memory persistence.
+ * Employs secondary indexes for fast O(1) VIN and LicensePlate lookups.
  */
 public class InMemoryVehicleRepository implements VehicleRepository {
   private var _db = new ConcurrentHashMap<UUID, Vehicle>()
+  private var _vinIndex = new ConcurrentHashMap<String, Vehicle>()
+  private var _plateIndex = new ConcurrentHashMap<String, Vehicle>()
 
   override function save(vehicle : Vehicle) : Vehicle {
     if (vehicle == null) {
@@ -19,7 +22,27 @@ public class InMemoryVehicleRepository implements VehicleRepository {
     if (vehicle.ID == null) {
       throw new IllegalArgumentException("Vehicle ID cannot be null")
     }
+
+    // Clean old indexes if updating
+    var existing = _db.get(vehicle.ID)
+    if (existing != null) {
+      if (existing.VIN != null) {
+        _vinIndex.remove(existing.VIN.trim().toLowerCase())
+      }
+      if (existing.LicensePlate != null) {
+        _plateIndex.remove(existing.LicensePlate.trim().toLowerCase())
+      }
+    }
+
     _db.put(vehicle.ID, vehicle)
+
+    if (vehicle.VIN != null && !vehicle.VIN.trim().isEmpty()) {
+      _vinIndex.put(vehicle.VIN.trim().toLowerCase(), vehicle)
+    }
+    if (vehicle.LicensePlate != null && !vehicle.LicensePlate.trim().isEmpty()) {
+      _plateIndex.put(vehicle.LicensePlate.trim().toLowerCase(), vehicle)
+    }
+
     return vehicle
   }
 
@@ -34,14 +57,14 @@ public class InMemoryVehicleRepository implements VehicleRepository {
     if (vin == null || vin.trim().isEmpty()) {
       return null
     }
-    var cleanVin = vin.trim().toLowerCase()
-    for (v in _db.values()) {
-      var currentVin = v.VIN ?: ""
-      if (currentVin.trim().toLowerCase().equals(cleanVin)) {
-        return v
-      }
+    return _vinIndex.get(vin.trim().toLowerCase())
+  }
+
+  override function findByLicensePlate(plate : String) : Vehicle {
+    if (plate == null || plate.trim().isEmpty()) {
+      return null
     }
-    return null
+    return _plateIndex.get(plate.trim().toLowerCase())
   }
 
   override function findAll() : List<Vehicle> {
@@ -52,10 +75,22 @@ public class InMemoryVehicleRepository implements VehicleRepository {
     if (id == null) {
       return false
     }
-    return _db.remove(id) != null
+    var existing = _db.remove(id)
+    if (existing != null) {
+      if (existing.VIN != null) {
+        _vinIndex.remove(existing.VIN.trim().toLowerCase())
+      }
+      if (existing.LicensePlate != null) {
+        _plateIndex.remove(existing.LicensePlate.trim().toLowerCase())
+      }
+      return true
+    }
+    return false
   }
 
   override function clear() {
     _db.clear()
+    _vinIndex.clear()
+    _plateIndex.clear()
   }
 }

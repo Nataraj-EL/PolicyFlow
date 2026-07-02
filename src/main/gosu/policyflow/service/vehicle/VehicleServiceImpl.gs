@@ -174,35 +174,12 @@ public class VehicleServiceImpl implements VehicleService {
    * @return true if duplicate VIN is found, false otherwise.
    */
   private function findDuplicateVin(vin : String, excludeId : UUID) : boolean {
-    var cleanVin = vin.trim().toLowerCase()
-    for (v in _repository.findAll()) {
-      if (excludeId == null || !v.ID.equals(excludeId)) {
-        var currentVin = v.VIN ?: ""
-        if (currentVin.trim().toLowerCase().equals(cleanVin)) {
-          return true
-        }
-      }
-    }
-    return false
+    var v = _repository.findByVin(vin)
+    return v != null && (excludeId == null || !v.ID.equals(excludeId))
   }
 
-  /**
-   * Helper function to detect duplicate License Plate usage.
-   * 
-   * @param plate License plate to search.
-   * @param excludeId ID to exclude from match (for updates).
-   * @return true if duplicate license plate is found, false otherwise.
-   */
   private function findDuplicateLicensePlate(plate : String, excludeId : UUID) : boolean {
-    var cleanPlate = plate.trim().toLowerCase()
-    for (v in _repository.findAll()) {
-      if (excludeId == null || !v.ID.equals(excludeId)) {
-        var currentPlate = v.LicensePlate ?: ""
-        if (currentPlate.trim().toLowerCase().equals(cleanPlate)) {
-          return true
-        }
-      }
-    }
-    return false
+    var v = _repository.findByLicensePlate(plate)
+    return v != null && (excludeId == null || !v.ID.equals(excludeId))
   }
 }

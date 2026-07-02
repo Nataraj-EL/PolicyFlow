@@ -48,6 +48,14 @@ public interface VehicleRepository {
   public function delete(id : UUID) : boolean
 
   /**
+   * Finds a vehicle by its unique license plate string.
+   * 
+   * @param plate The license plate text.
+   * @return The vehicle if found, null otherwise.
+   */
+  public function findByLicensePlate(plate : String) : Vehicle
+
+  /**
    * Clears all vehicles from the data store.
    */
   public function clear() : void

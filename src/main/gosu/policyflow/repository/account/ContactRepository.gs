@@ -40,6 +40,14 @@ public interface ContactRepository {
   public function delete(id : UUID) : boolean
 
   /**
+   * Finds a contact by their unique email address.
+   * 
+   * @param email The email address to search.
+   * @return The contact if found, null otherwise.
+   */
+  public function findByEmail(email : String) : Contact
+
+  /**
    * Clears all contacts from the data store.
    */
   public function clear() : void

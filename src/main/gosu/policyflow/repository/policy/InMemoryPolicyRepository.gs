@@ -8,9 +8,11 @@ uses java.util.UUID
 
 /**
  * Concurrent map-backed implementation of {@link PolicyRepository} for in-memory persistence.
+ * Employs a secondary index for fast O(1) PolicyNumber lookups.
  */
 public class InMemoryPolicyRepository implements PolicyRepository {
   private var _db = new ConcurrentHashMap<UUID, Policy>()
+  private var _numberIndex = new ConcurrentHashMap<String, Policy>()
 
   override function save(policy : Policy) : Policy {
     if (policy == null) {
@@ -19,7 +21,19 @@ public class InMemoryPolicyRepository implements PolicyRepository {
     if (policy.ID == null) {
       throw new IllegalArgumentException("Policy ID cannot be null")
     }
+
+    // Clean old index if updating
+    var existing = _db.get(policy.ID)
+    if (existing != null && existing.PolicyNumber != null) {
+      _numberIndex.remove(existing.PolicyNumber.trim().toLowerCase())
+    }
+
     _db.put(policy.ID, policy)
+
+    if (policy.PolicyNumber != null && !policy.PolicyNumber.trim().isEmpty()) {
+      _numberIndex.put(policy.PolicyNumber.trim().toLowerCase(), policy)
+    }
+
     return policy
   }
 
@@ -34,14 +48,7 @@ public class InMemoryPolicyRepository implements PolicyRepository {
     if (policyNumber == null || policyNumber.trim().isEmpty()) {
       return null
     }
-    var cleanNum = policyNumber.trim().toLowerCase()
-    for (p in _db.values()) {
-      var currentNum = p.PolicyNumber ?: ""
-      if (currentNum.trim().toLowerCase().equals(cleanNum)) {
-        return p
-      }
-    }
-    return null
+    return _numberIndex.get(policyNumber.trim().toLowerCase())
   }
 
   override function findByVehicleId(vehicleId : UUID) : List<Policy> {
@@ -64,10 +71,18 @@ public class InMemoryPolicyRepository implements PolicyRepository {
     if (id == null) {
       return false
     }
-    return _db.remove(id) != null
+    var existing = _db.remove(id)
+    if (existing != null) {
+      if (existing.PolicyNumber != null) {
+        _numberIndex.remove(existing.PolicyNumber.trim().toLowerCase())
+      }
+      return true
+    }
+    return false
   }
 
   override function clear() {
     _db.clear()
+    _numberIndex.clear()
   }
 }
