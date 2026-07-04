@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-07-04
+
+### Added
+- REST API Layer: Exposed core repos and services as Spring Boot REST controllers (`/api/contacts`, `/api/vehicles`, `/api/policies`, `/api/claims`, `/api/premium`, `/api/reporting`, `/api/search`).
+- Managed Lifecycle: Wired all Gosu services and repos directly as Spring Beans via `ServiceConfig.java`, avoiding reliance on static singletons.
+- Global Error Handling: Created `GlobalExceptionHandler` converting business exceptions and validation checks to standard HTTP codes.
+- API Documentation: Configured Springdoc OpenAPI for interactive browser API exploration.
+- Integration Testing: Added a MockMvc test suite `RestApiIntegrationTest` covering the complete workflow, including creation, update, renewal, cancel, search, and portfolio aggregations.
+- Build Architecture: Configured separate maven compiler executions for Gosu and Java sources to compile Gosu bytecode first and prevent mixed-language stub generation errors.
+
 ## [0.9.0] - 2026-07-02
 
 ### Added

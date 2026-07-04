@@ -33,6 +33,9 @@ uses policyflow.service.search.SearchServiceImpl
 
 /**
  * Bootstrap container providing simple dependency injection and singleton lifecycle management.
+ * 
+ * @deprecated Legacy container bridge. In Spring Boot runtime environments, bean lifecycles 
+ * are managed dynamically by ServiceConfig.java. This class serves as a legacy bridge for Gosu tests.
  */
 public class AppContainer {
   private static var _instance : AppContainer = new AppContainer()
