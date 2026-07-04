@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-07-04
+
+### Added
+- React Single-Page Application: Developed a clean, responsive web interface under the `frontend/` subdirectory utilizing React 18, Vite, and TypeScript.
+- Server State Management: Integrated TanStack Query (`@tanstack/react-query`) for unified loading states, error bindings, and automatic cache invalidations.
+- Recharts Visualizations: Embedded theme-compliant Recharts distribution statistics to visually display policy classifications and claims statuses.
+- Full Customer and Risk CRUD: Supported creation, edits, details, and deletions for contacts and vehicles with immediate toast notifications.
+- Policy Life Cycle Endorsements: Implemented endorsement adjustments, pro-rata cancellations, renewals, and reinstatements with visual audit logs.
+- Interactive Premium Calculator: Configured a simulator calculating auto premium quotes.
+- Extensible Cross-Entity Search: Enabled global case-insensitive search queries with criteria-based filters.
+- Styling Token Integration: Deployed CSS variables matching the required brand identity colors on all cards, buttons, modals, input elements, and chart plots.
+
 ## [1.0.0] - 2026-07-04
 
 ### Added

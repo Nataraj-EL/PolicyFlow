@@ -87,8 +87,41 @@ PolicyFlow exposes a rich REST API layer for client interaction. All business an
 
 ---
 
+## React Frontend
+
+PolicyFlow includes a modern, responsive single-page React frontend built with **Vite** and **TypeScript**. It utilizes **TanStack Query (React Query)** for server state caching and **Recharts** for visualizing portfolio stats.
+
+### Features
+- **Sidebar Navigation**: Dashboard, Contacts, Vehicles, Policies, Claims, Calculator, and Search.
+- **Charts Dashboard**: Real-time distribution pie charts and status bar charts.
+- **Full CRUD Support**: Manage contacts, vehicles, policy life cycles (renew, cancel, reinstate, history logs), and file/close claims.
+- **Premium Calculator**: Receipt-style premium pricing breakdown simulator.
+- **Global Search**: Cross-entity criteria-based case-insensitive lookup.
+
+### How to Run Locally
+
+1. **Configure Environment Variables**:
+   Copy `.env.example` to `.env` inside the `frontend` folder:
+   ```bash
+   cp frontend/.env.example frontend/.env
+   ```
+2. **Install Node Dependencies**:
+   ```bash
+   cd frontend
+   npm install
+   ```
+3. **Run Dev Server**:
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:5173](http://localhost:5173) in your browser. Make sure the Spring Boot server is running on port `8080`.
+
+---
+
 ## Sprint Board & Status
 
 * **Sprint 01 - 09**: Setup core domain layers, underwriting rules, dynamic rating engine, search engines, error formats, and indexing.
-* **Sprint 10 (Current)**: REST API Layer integration. Expose repositories and services as Spring Boot REST controllers.
+* **Sprint 10**: REST API Layer integration. Expose repositories and services as Spring Boot REST controllers.
+* **Sprint 11 (Current)**: React + Vite Frontend application. Expose UI CRUD features, calculator receipt metrics, search tables, and Recharts statistics.
+
 
