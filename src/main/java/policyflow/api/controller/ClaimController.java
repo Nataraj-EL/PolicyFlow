@@ -3,6 +3,7 @@ package policyflow.api.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import policyflow.api.dto.ClaimDto;
@@ -19,6 +20,7 @@ import java.util.UUID;
  */
 @RestController
 @RequestMapping("/api/claims")
+@Transactional
 public class ClaimController {
 
     private final ClaimService claimService;

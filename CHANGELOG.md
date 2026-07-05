@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-07-05
+
+### Added
+- Flyway Migrations: Initialized versioned database schema migration script `V1__initial_schema.sql` under resources defining relational tables, foreign key constraints, and performance indexes.
+- Enterprise-grade Database Persistence: Implemented custom Spring `JdbcTemplate` repository adapters in Java (`JdbcContactRepository`, `JdbcVehicleRepository`, `JdbcPolicyRepository`, `JdbcPolicyHistoryRepository`, `JdbcClaimRepository`, `JdbcClaimHistoryRepository`) supporting persistent CRUD and retrieval operations.
+- Relational Integrity & Performance: Wired foreign key bindings linking tables together, and declared unique indexes on high-lookup columns (`email_address`, `vin`, `policy_number`, `claim_number`).
+- Transactional Boundary Control: Decorated REST API entrypoint controller classes with Spring `@Transactional` boundary annotations to guarantee transactional atomicity.
+- YAML Configuration Profiles: Replaced application properties with YAML-based Spring Profiles (`dev` for H2 file persistence, `prod` for cloud PostgreSQL).
+
 ## [1.1.0] - 2026-07-04
 
 ### Added

@@ -6,17 +6,17 @@ import org.springframework.context.annotation.Configuration;
 import policyflow.repository.account.AccountRepository;
 import policyflow.repository.account.InMemoryAccountRepository;
 import policyflow.repository.account.ContactRepository;
-import policyflow.repository.account.InMemoryContactRepository;
+import policyflow.repository.account.JdbcContactRepository;
 import policyflow.repository.vehicle.VehicleRepository;
-import policyflow.repository.vehicle.InMemoryVehicleRepository;
+import policyflow.repository.vehicle.JdbcVehicleRepository;
 import policyflow.repository.policy.PolicyRepository;
-import policyflow.repository.policy.InMemoryPolicyRepository;
+import policyflow.repository.policy.JdbcPolicyRepository;
 import policyflow.repository.policy.PolicyHistoryRepository;
-import policyflow.repository.policy.InMemoryPolicyHistoryRepository;
+import policyflow.repository.policy.JdbcPolicyHistoryRepository;
 import policyflow.repository.claim.ClaimRepository;
-import policyflow.repository.claim.InMemoryClaimRepository;
+import policyflow.repository.claim.JdbcClaimRepository;
 import policyflow.repository.claim.ClaimHistoryRepository;
-import policyflow.repository.claim.InMemoryClaimHistoryRepository;
+import policyflow.repository.claim.JdbcClaimHistoryRepository;
 
 import policyflow.service.account.AccountService;
 import policyflow.service.account.AccountServiceImpl;
@@ -35,6 +35,7 @@ import policyflow.service.reporting.ReportingServiceImpl;
 import policyflow.service.search.SearchService;
 import policyflow.service.search.SearchServiceImpl;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -65,33 +66,33 @@ public class ServiceConfig {
     }
 
     @Bean
-    public ContactRepository contactRepository() {
-        return new InMemoryContactRepository();
+    public ContactRepository contactRepository(JdbcTemplate jdbcTemplate) {
+        return new JdbcContactRepository(jdbcTemplate);
     }
 
     @Bean
-    public VehicleRepository vehicleRepository() {
-        return new InMemoryVehicleRepository();
+    public VehicleRepository vehicleRepository(JdbcTemplate jdbcTemplate) {
+        return new JdbcVehicleRepository(jdbcTemplate);
     }
 
     @Bean
-    public PolicyRepository policyRepository() {
-        return new InMemoryPolicyRepository();
+    public PolicyRepository policyRepository(JdbcTemplate jdbcTemplate) {
+        return new JdbcPolicyRepository(jdbcTemplate);
     }
 
     @Bean
-    public PolicyHistoryRepository policyHistoryRepository() {
-        return new InMemoryPolicyHistoryRepository();
+    public PolicyHistoryRepository policyHistoryRepository(JdbcTemplate jdbcTemplate) {
+        return new JdbcPolicyHistoryRepository(jdbcTemplate);
     }
 
     @Bean
-    public ClaimRepository claimRepository() {
-        return new InMemoryClaimRepository();
+    public ClaimRepository claimRepository(JdbcTemplate jdbcTemplate) {
+        return new JdbcClaimRepository(jdbcTemplate);
     }
 
     @Bean
-    public ClaimHistoryRepository claimHistoryRepository() {
-        return new InMemoryClaimHistoryRepository();
+    public ClaimHistoryRepository claimHistoryRepository(JdbcTemplate jdbcTemplate) {
+        return new JdbcClaimHistoryRepository(jdbcTemplate);
     }
 
     // --- Services ---

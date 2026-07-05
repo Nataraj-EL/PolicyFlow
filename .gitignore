@@ -15,3 +15,6 @@ PolicyFlow_Interview_Journal.md
 
 # Log files
 *.log
+
+# Local databases
+data/
