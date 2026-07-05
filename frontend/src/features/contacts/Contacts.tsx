@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   useContacts, 
   useCreateContact, 
@@ -37,6 +37,55 @@ export const Contacts: React.FC = () => {
   const [state, setState] = useState('');
   const [postalCode, setPostalCode] = useState('');
 
+  // Touched state tracker
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  // Real-time validations
+  const formErrors = useMemo(() => {
+    const errs: Record<string, string> = {};
+
+    if (contactType === 'PERSON') {
+      if (!firstName.trim()) errs.firstName = 'First name is required';
+      if (!lastName.trim()) errs.lastName = 'Last name is required';
+    } else {
+      if (!companyName.trim()) errs.companyName = 'Company name is required';
+    }
+
+    // Email validation: standard email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailAddress.trim()) {
+      errs.emailAddress = 'Email address is required';
+    } else if (!emailRegex.test(emailAddress)) {
+      errs.emailAddress = 'Invalid email format';
+    }
+
+    // Phone number: required, exactly 10 digits (numeric only)
+    if (!phoneNumber.trim()) {
+      errs.phoneNumber = 'Phone number is required';
+    } else if (!/^\d+$/.test(phoneNumber)) {
+      errs.phoneNumber = 'Phone number must contain numbers only';
+    } else if (phoneNumber.length !== 10) {
+      errs.phoneNumber = 'Phone number must be exactly 10 digits';
+    }
+
+    if (!addressLine1.trim()) errs.addressLine1 = 'Address Line 1 is required';
+    if (!city.trim()) errs.city = 'City is required';
+    if (!state.trim()) errs.state = 'State is required';
+
+    // PIN Code: exactly 6 digits
+    if (!postalCode.trim()) {
+      errs.postalCode = 'PIN Code is required';
+    } else if (!/^\d+$/.test(postalCode)) {
+      errs.postalCode = 'PIN Code must contain numbers only';
+    } else if (postalCode.length !== 6) {
+      errs.postalCode = 'PIN Code must be exactly 6 digits';
+    }
+
+    return errs;
+  }, [contactType, firstName, lastName, companyName, emailAddress, phoneNumber, addressLine1, city, state, postalCode]);
+
+  const isFormInvalid = Object.keys(formErrors).length > 0;
+
   const resetForm = () => {
     setSelectedContact(null);
     setContactType('PERSON');
@@ -50,6 +99,7 @@ export const Contacts: React.FC = () => {
     setCity('');
     setState('');
     setPostalCode('');
+    setTouched({});
   };
 
   const handleOpenAdd = () => {
@@ -70,6 +120,7 @@ export const Contacts: React.FC = () => {
     setCity(contact.city || '');
     setState(contact.state || '');
     setPostalCode(contact.postalCode || '');
+    setTouched({});
     setIsModalOpen(true);
   };
 
@@ -81,26 +132,20 @@ export const Contacts: React.FC = () => {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Client-side validations
-    if (contactType === 'PERSON') {
-      if (!firstName.trim() || !lastName.trim()) {
-        showToast('First and Last names are required for Person contact type.', 'warning');
-        return;
-      }
-    } else {
-      if (!companyName.trim()) {
-        showToast('Company name is required for Company contact type.', 'warning');
-        return;
-      }
-    }
-
-    if (!emailAddress.trim() || !emailAddress.includes('@') || !emailAddress.includes('.')) {
-      showToast('A valid email address containing @ and . is required.', 'warning');
-      return;
-    }
-
-    if (!addressLine1.trim() || !city.trim() || !state.trim() || !postalCode.trim()) {
-      showToast('Physical address details (Line 1, City, State, and Postal Code) are required.', 'warning');
+    if (isFormInvalid) {
+      const allTouched: Record<string, boolean> = {
+        firstName: true,
+        lastName: true,
+        companyName: true,
+        emailAddress: true,
+        phoneNumber: true,
+        addressLine1: true,
+        city: true,
+        state: true,
+        postalCode: true
+      };
+      setTouched(allTouched);
+      showToast('Please correct form validation errors.', 'warning');
       return;
     }
 
@@ -254,6 +299,7 @@ export const Contacts: React.FC = () => {
               onClick={handleFormSubmit}
               variant="primary"
               isLoading={createMutation.isPending || updateMutation.isPending}
+              disabled={isFormInvalid}
             >
               {selectedContact ? 'Save Changes' : 'Create Contact'}
             </Button>
@@ -281,8 +327,12 @@ export const Contacts: React.FC = () => {
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
+                  onBlur={() => setTouched(prev => ({ ...prev, firstName: true }))}
                   placeholder="Nataraj"
                 />
+                {touched.firstName && formErrors.firstName && (
+                  <span style={{ color: 'var(--color-error)', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{formErrors.firstName}</span>
+                )}
               </div>
               <div className="form-group">
                 <label>Last Name *</label>
@@ -290,8 +340,12 @@ export const Contacts: React.FC = () => {
                   type="text"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
+                  onBlur={() => setTouched(prev => ({ ...prev, lastName: true }))}
                   placeholder="EL"
                 />
+                {touched.lastName && formErrors.lastName && (
+                  <span style={{ color: 'var(--color-error)', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{formErrors.lastName}</span>
+                )}
               </div>
             </div>
           ) : (
@@ -301,8 +355,12 @@ export const Contacts: React.FC = () => {
                 type="text"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
+                onBlur={() => setTouched(prev => ({ ...prev, companyName: true }))}
                 placeholder="e.g. Acme Corp"
               />
+              {touched.companyName && formErrors.companyName && (
+                <span style={{ color: 'var(--color-error)', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{formErrors.companyName}</span>
+              )}
             </div>
           )}
 
@@ -313,17 +371,25 @@ export const Contacts: React.FC = () => {
                 type="email"
                 value={emailAddress}
                 onChange={(e) => setEmailAddress(e.target.value)}
+                onBlur={() => setTouched(prev => ({ ...prev, emailAddress: true }))}
                 placeholder="natarajel.dev@gmail.com"
               />
+              {touched.emailAddress && formErrors.emailAddress && (
+                <span style={{ color: 'var(--color-error)', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{formErrors.emailAddress}</span>
+              )}
             </div>
             <div className="form-group">
-              <label>Phone Number</label>
+              <label>Phone Number *</label>
               <input
                 type="text"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
-                placeholder="e.g. 555-0199"
+                onBlur={() => setTouched(prev => ({ ...prev, phoneNumber: true }))}
+                placeholder="e.g. 9876543210"
               />
+              {touched.phoneNumber && formErrors.phoneNumber && (
+                <span style={{ color: 'var(--color-error)', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{formErrors.phoneNumber}</span>
+              )}
             </div>
           </div>
 
@@ -333,8 +399,12 @@ export const Contacts: React.FC = () => {
               type="text"
               value={addressLine1}
               onChange={(e) => setAddressLine1(e.target.value)}
+              onBlur={() => setTouched(prev => ({ ...prev, addressLine1: true }))}
               placeholder="No. 12, Anna Main Road"
             />
+            {touched.addressLine1 && formErrors.addressLine1 && (
+              <span style={{ color: 'var(--color-error)', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{formErrors.addressLine1}</span>
+            )}
           </div>
 
           <div className="form-group">
@@ -354,8 +424,12 @@ export const Contacts: React.FC = () => {
                 type="text"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
+                onBlur={() => setTouched(prev => ({ ...prev, city: true }))}
                 placeholder="Chennai"
               />
+              {touched.city && formErrors.city && (
+                <span style={{ color: 'var(--color-error)', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{formErrors.city}</span>
+              )}
             </div>
             <div className="form-group">
               <label>State *</label>
@@ -363,17 +437,25 @@ export const Contacts: React.FC = () => {
                 type="text"
                 value={state}
                 onChange={(e) => setState(e.target.value)}
+                onBlur={() => setTouched(prev => ({ ...prev, state: true }))}
                 placeholder="Tamil Nadu"
               />
+              {touched.state && formErrors.state && (
+                <span style={{ color: 'var(--color-error)', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{formErrors.state}</span>
+              )}
             </div>
             <div className="form-group">
-              <label>ZIP Code *</label>
+              <label>PIN Code *</label>
               <input
                 type="text"
                 value={postalCode}
                 onChange={(e) => setPostalCode(e.target.value)}
+                onBlur={() => setTouched(prev => ({ ...prev, postalCode: true }))}
                 placeholder="600069"
               />
+              {touched.postalCode && formErrors.postalCode && (
+                <span style={{ color: 'var(--color-error)', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{formErrors.postalCode}</span>
+              )}
             </div>
           </div>
         </form>

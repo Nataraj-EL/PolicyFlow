@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   useVehicles, 
   useCreateVehicle, 
@@ -33,6 +33,35 @@ export const Vehicles: React.FC = () => {
   const [vehicleType, setVehicleType] = useState('SEDAN');
   const [fuelType, setFuelType] = useState('GASOLINE');
 
+  // Touched state tracker
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+
+  // Real-time validations
+  const formErrors = useMemo(() => {
+    const errs: Record<string, string> = {};
+
+    const vinRegex = /^[A-Za-z0-9]{17}$/;
+    if (!vin.trim()) {
+      errs.vin = 'VIN is required';
+    } else if (!vinRegex.test(vin)) {
+      errs.vin = 'VIN must be exactly 17 alphanumeric characters';
+    }
+
+    if (!make.trim()) errs.make = 'Vehicle Make is required';
+    if (!model.trim()) errs.model = 'Vehicle Model is required';
+
+    const currentYear = new Date().getFullYear();
+    if (!year) {
+      errs.year = 'Manufacture Year is required';
+    } else if (year < 1900 || year > currentYear + 1) {
+      errs.year = `Manufacture year must be between 1900 and ${currentYear + 1}`;
+    }
+
+    return errs;
+  }, [vin, make, model, year]);
+
+  const isFormInvalid = Object.keys(formErrors).length > 0;
+
   const resetForm = () => {
     setSelectedVehicle(null);
     setVin('');
@@ -42,6 +71,7 @@ export const Vehicles: React.FC = () => {
     setLicensePlate('');
     setVehicleType('SEDAN');
     setFuelType('GASOLINE');
+    setTouched({});
   };
 
   const handleOpenAdd = () => {
@@ -58,6 +88,7 @@ export const Vehicles: React.FC = () => {
     setLicensePlate(vehicle.licensePlate || '');
     setVehicleType(vehicle.vehicleType);
     setFuelType(vehicle.fuelType);
+    setTouched({});
     setIsModalOpen(true);
   };
 
@@ -69,21 +100,15 @@ export const Vehicles: React.FC = () => {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Client-side validations
-    const vinRegex = /^[A-Za-z0-9]{17}$/;
-    if (!vinRegex.test(vin)) {
-      showToast('VIN must be exactly 17 alphanumeric characters.', 'warning');
-      return;
-    }
-
-    if (!make.trim() || !model.trim()) {
-      showToast('Vehicle Make and Model are required.', 'warning');
-      return;
-    }
-
-    const currentYear = new Date().getFullYear();
-    if (year < 1900 || year > currentYear + 1) {
-      showToast(`Manufacture year must be between 1900 and ${currentYear + 1}.`, 'warning');
+    if (isFormInvalid) {
+      const allTouched: Record<string, boolean> = {
+        vin: true,
+        make: true,
+        model: true,
+        year: true
+      };
+      setTouched(allTouched);
+      showToast('Please correct form validation errors.', 'warning');
       return;
     }
 
@@ -231,6 +256,7 @@ export const Vehicles: React.FC = () => {
               onClick={handleFormSubmit}
               variant="primary"
               isLoading={createMutation.isPending || updateMutation.isPending}
+              disabled={isFormInvalid}
             >
               {selectedVehicle ? 'Save Changes' : 'Add Vehicle'}
             </Button>
@@ -244,11 +270,15 @@ export const Vehicles: React.FC = () => {
               type="text"
               value={vin}
               onChange={(e) => setVin(e.target.value)}
+              onBlur={() => setTouched(prev => ({ ...prev, vin: true }))}
               placeholder="17 Alphanumeric characters"
               maxLength={17}
               disabled={!!selectedVehicle} // VIN is immutable in PolicyFlow domain
               style={{ textTransform: 'uppercase', fontFamily: 'monospace' }}
             />
+            {touched.vin && formErrors.vin && (
+              <span style={{ color: 'var(--color-error)', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{formErrors.vin}</span>
+            )}
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
@@ -258,8 +288,12 @@ export const Vehicles: React.FC = () => {
                 type="text"
                 value={make}
                 onChange={(e) => setMake(e.target.value)}
+                onBlur={() => setTouched(prev => ({ ...prev, make: true }))}
                 placeholder="e.g. Ford"
               />
+              {touched.make && formErrors.make && (
+                <span style={{ color: 'var(--color-error)', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{formErrors.make}</span>
+              )}
             </div>
             <div className="form-group">
               <label>Vehicle Model *</label>
@@ -267,8 +301,12 @@ export const Vehicles: React.FC = () => {
                 type="text"
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
+                onBlur={() => setTouched(prev => ({ ...prev, model: true }))}
                 placeholder="e.g. Explorer"
               />
+              {touched.model && formErrors.model && (
+                <span style={{ color: 'var(--color-error)', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{formErrors.model}</span>
+              )}
             </div>
           </div>
 
@@ -278,9 +316,13 @@ export const Vehicles: React.FC = () => {
               <input
                 type="number"
                 value={year}
-                onChange={(e) => setYear(parseInt(e.target.value) || new Date().getFullYear())}
+                onChange={(e) => setYear(parseInt(e.target.value) || 0)}
+                onBlur={() => setTouched(prev => ({ ...prev, year: true }))}
                 placeholder="e.g. 2017"
               />
+              {touched.year && formErrors.year && (
+                <span style={{ color: 'var(--color-error)', fontSize: '0.8rem', marginTop: '4px', display: 'block' }}>{formErrors.year}</span>
+              )}
             </div>
             <div className="form-group">
               <label>License Plate</label>
