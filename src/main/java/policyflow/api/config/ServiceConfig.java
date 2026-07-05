@@ -35,11 +35,27 @@ import policyflow.service.reporting.ReportingServiceImpl;
 import policyflow.service.search.SearchService;
 import policyflow.service.search.SearchServiceImpl;
 
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 /**
  * Spring configuration class defining beans for repositories and services.
  */
 @Configuration
 public class ServiceConfig {
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
+                        .allowedHeaders("*");
+            }
+        };
+    }
 
     // --- Repositories ---
 

@@ -281,7 +281,7 @@ export const Contacts: React.FC = () => {
                   type="text"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  placeholder="e.g. John"
+                  placeholder="Nataraj"
                 />
               </div>
               <div className="form-group">
@@ -290,7 +290,7 @@ export const Contacts: React.FC = () => {
                   type="text"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  placeholder="e.g. Doe"
+                  placeholder="EL"
                 />
               </div>
             </div>
@@ -313,7 +313,7 @@ export const Contacts: React.FC = () => {
                 type="email"
                 value={emailAddress}
                 onChange={(e) => setEmailAddress(e.target.value)}
-                placeholder="e.g. john@example.com"
+                placeholder="natarajel.dev@gmail.com"
               />
             </div>
             <div className="form-group">
@@ -333,7 +333,7 @@ export const Contacts: React.FC = () => {
               type="text"
               value={addressLine1}
               onChange={(e) => setAddressLine1(e.target.value)}
-              placeholder="e.g. 123 Main St"
+              placeholder="No. 12, Anna Main Road"
             />
           </div>
 
@@ -343,7 +343,7 @@ export const Contacts: React.FC = () => {
               type="text"
               value={addressLine2}
               onChange={(e) => setAddressLine2(e.target.value)}
-              placeholder="e.g. Suite 400 (Optional)"
+              placeholder="Near GST Road"
             />
           </div>
 
@@ -354,7 +354,7 @@ export const Contacts: React.FC = () => {
                 type="text"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                placeholder="e.g. Seattle"
+                placeholder="Chennai"
               />
             </div>
             <div className="form-group">
@@ -363,7 +363,7 @@ export const Contacts: React.FC = () => {
                 type="text"
                 value={state}
                 onChange={(e) => setState(e.target.value)}
-                placeholder="WA"
+                placeholder="Tamil Nadu"
               />
             </div>
             <div className="form-group">
@@ -372,7 +372,7 @@ export const Contacts: React.FC = () => {
                 type="text"
                 value={postalCode}
                 onChange={(e) => setPostalCode(e.target.value)}
-                placeholder="98101"
+                placeholder="600069"
               />
             </div>
           </div>
