@@ -10,12 +10,12 @@ public class PolicyFlowConfig {
   /**
    * Base premium amount for personal auto lines.
    */
-  public static final var BASE_PREMIUM_PERSONAL_AUTO : BigDecimal = new BigDecimal("250.00")
+  public static final var BASE_PREMIUM_PERSONAL_AUTO : BigDecimal = new BigDecimal("5000.00")
 
   /**
    * Base premium amount for commercial auto lines.
    */
-  public static final var BASE_PREMIUM_COMMERCIAL_AUTO : BigDecimal = new BigDecimal("500.00")
+  public static final var BASE_PREMIUM_COMMERCIAL_AUTO : BigDecimal = new BigDecimal("10000.00")
 
   /**
    * Default state tax rate (8%).

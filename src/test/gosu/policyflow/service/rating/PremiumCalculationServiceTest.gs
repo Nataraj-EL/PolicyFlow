@@ -49,13 +49,13 @@ public class PremiumCalculationServiceTest {
     var breakdown = _service.calculatePremium(vehicle, contact)
 
     Assert.assertNotNull(breakdown)
-    assertBigDecimalEquals(new BigDecimal("500.00"), breakdown.BasePremium)
+    assertBigDecimalEquals(new BigDecimal("10000.00"), breakdown.BasePremium)
     assertBigDecimalEquals(new BigDecimal("0.00"), breakdown.VehicleTypeAdjustment)
     assertBigDecimalEquals(new BigDecimal("0.00"), breakdown.VehicleAgeAdjustment)
     assertBigDecimalEquals(new BigDecimal("0.00"), breakdown.FuelTypeAdjustment)
     assertBigDecimalEquals(new BigDecimal("0.00"), breakdown.ContactTypeAdjustment)
-    assertBigDecimalEquals(new BigDecimal("40.00"), breakdown.Tax) // 500 * 0.08
-    assertBigDecimalEquals(new BigDecimal("540.00"), breakdown.TotalPremium)
+    assertBigDecimalEquals(new BigDecimal("800.00"), breakdown.Tax) // 10000 * 0.08
+    assertBigDecimalEquals(new BigDecimal("10800.00"), breakdown.TotalPremium)
   }
 
   @Test
@@ -75,14 +75,14 @@ public class PremiumCalculationServiceTest {
     var breakdown = _service.calculatePremium(vehicle, contact)
 
     Assert.assertNotNull(breakdown)
-    assertBigDecimalEquals(new BigDecimal("500.00"), breakdown.BasePremium)
-    assertBigDecimalEquals(new BigDecimal("100.00"), breakdown.VehicleTypeAdjustment) // SUV
-    assertBigDecimalEquals(new BigDecimal("100.00"), breakdown.VehicleAgeAdjustment) // New car surcharge
-    assertBigDecimalEquals(new BigDecimal("-50.00"), breakdown.FuelTypeAdjustment) // Electric discount
-    assertBigDecimalEquals(new BigDecimal("100.00"), breakdown.ContactTypeAdjustment) // Company commercial risk
-    // Subtotal: 500 + 100 + 100 - 50 + 100 = 750
-    assertBigDecimalEquals(new BigDecimal("60.00"), breakdown.Tax) // 750 * 0.08
-    assertBigDecimalEquals(new BigDecimal("810.00"), breakdown.TotalPremium) // 750 + 60
+    assertBigDecimalEquals(new BigDecimal("10000.00"), breakdown.BasePremium)
+    assertBigDecimalEquals(new BigDecimal("2000.00"), breakdown.VehicleTypeAdjustment) // SUV
+    assertBigDecimalEquals(new BigDecimal("2000.00"), breakdown.VehicleAgeAdjustment) // New car surcharge
+    assertBigDecimalEquals(new BigDecimal("-1000.00"), breakdown.FuelTypeAdjustment) // Electric discount
+    assertBigDecimalEquals(new BigDecimal("2000.00"), breakdown.ContactTypeAdjustment) // Company commercial risk
+    // Subtotal: 10000 + 2000 + 2000 - 1000 + 2000 = 15000
+    assertBigDecimalEquals(new BigDecimal("1200.00"), breakdown.Tax) // 15000 * 0.08
+    assertBigDecimalEquals(new BigDecimal("16200.00"), breakdown.TotalPremium) // 15000 + 1200
   }
 
   @Test
@@ -103,14 +103,14 @@ public class PremiumCalculationServiceTest {
     var breakdown = _service.calculatePremium(vehicle, contact)
 
     Assert.assertNotNull(breakdown)
-    assertBigDecimalEquals(new BigDecimal("500.00"), breakdown.BasePremium)
-    assertBigDecimalEquals(new BigDecimal("200.00"), breakdown.VehicleTypeAdjustment) // Coupe
-    assertBigDecimalEquals(new BigDecimal("50.00"), breakdown.VehicleAgeAdjustment) // Old car risk
-    assertBigDecimalEquals(new BigDecimal("-25.00"), breakdown.FuelTypeAdjustment) // Hybrid discount
+    assertBigDecimalEquals(new BigDecimal("10000.00"), breakdown.BasePremium)
+    assertBigDecimalEquals(new BigDecimal("4000.00"), breakdown.VehicleTypeAdjustment) // Coupe
+    assertBigDecimalEquals(new BigDecimal("1000.00"), breakdown.VehicleAgeAdjustment) // Old car risk
+    assertBigDecimalEquals(new BigDecimal("-500.00"), breakdown.FuelTypeAdjustment) // Hybrid discount
     assertBigDecimalEquals(new BigDecimal("0.00"), breakdown.ContactTypeAdjustment) // Person
-    // Subtotal: 500 + 200 + 50 - 25 + 0 = 725
-    assertBigDecimalEquals(new BigDecimal("58.00"), breakdown.Tax) // 725 * 0.08
-    assertBigDecimalEquals(new BigDecimal("783.00"), breakdown.TotalPremium) // 725 + 58
+    // Subtotal: 10000 + 4000 + 1000 - 500 + 0 = 14500
+    assertBigDecimalEquals(new BigDecimal("1160.00"), breakdown.Tax) // 14500 * 0.08
+    assertBigDecimalEquals(new BigDecimal("15660.00"), breakdown.TotalPremium) // 14500 + 1160
   }
 
   @Test
@@ -120,15 +120,15 @@ public class PremiumCalculationServiceTest {
 
     // Set up a custom calculator with only the BasePremiumRule
     var rules = new ArrayList<RatingRule>()
-    rules.add(new BasePremiumRule(new BigDecimal("350.00")))
+    rules.add(new BasePremiumRule(new BigDecimal("7000.00")))
 
     var customCalculator = new PremiumCalculator(rules)
     var customService = new PremiumCalculationServiceImpl(customCalculator)
 
     var breakdown = customService.calculatePremium(vehicle, contact)
-    assertBigDecimalEquals(new BigDecimal("350.00"), breakdown.BasePremium)
+    assertBigDecimalEquals(new BigDecimal("7000.00"), breakdown.BasePremium)
     assertBigDecimalEquals(new BigDecimal("0.00"), breakdown.Tax)
-    assertBigDecimalEquals(new BigDecimal("350.00"), breakdown.TotalPremium)
+    assertBigDecimalEquals(new BigDecimal("7000.00"), breakdown.TotalPremium)
   }
 
   private function assertBigDecimalEquals(expected : BigDecimal, actual : BigDecimal) {

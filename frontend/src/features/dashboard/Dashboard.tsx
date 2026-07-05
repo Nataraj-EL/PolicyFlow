@@ -14,17 +14,13 @@ import {
 } from 'recharts';
 import { useReportingSummary } from '../../services/queries';
 import { Card } from '../../components/ui/Card';
-import { FileText, AlertTriangle, DollarSign } from 'lucide-react';
+import { FileText, AlertTriangle, IndianRupee } from 'lucide-react';
+import { formatCurrency } from '../../utils/format';
 
 export const Dashboard: React.FC = () => {
   const { data: summary, isLoading, error } = useReportingSummary();
 
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(val);
-  };
+
 
   if (isLoading) {
     return (
@@ -148,7 +144,7 @@ export const Dashboard: React.FC = () => {
                 border: '1px solid var(--color-border)',
               }}
             >
-              <DollarSign size={28} />
+              <IndianRupee size={28} />
             </div>
             <div>
               <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', fontWeight: 600 }}>Total In-Force Premium</p>

@@ -13,8 +13,8 @@ public class VehicleAgeRule implements RatingRule {
   private var _referenceYear : int
   private var _newCarThreshold : int = 3
   private var _oldCarThreshold : int = 10
-  private var _newCarFactor : BigDecimal = new BigDecimal("100.00")
-  private var _oldCarFactor : BigDecimal = new BigDecimal("50.00")
+  private var _newCarFactor : BigDecimal = new BigDecimal("2000.00")
+  private var _oldCarFactor : BigDecimal = new BigDecimal("1000.00")
 
   /**
    * Default constructor setting thresholds and reference year dynamically to current time.

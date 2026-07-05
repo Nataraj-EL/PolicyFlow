@@ -19,11 +19,11 @@ public class VehicleTypeRule implements RatingRule {
    */
   public construct() {
     _factors.put(VehicleType.SEDAN, new BigDecimal("0.00"))
-    _factors.put(VehicleType.SUV, new BigDecimal("100.00"))
-    _factors.put(VehicleType.TRUCK, new BigDecimal("150.00"))
-    _factors.put(VehicleType.COUPE, new BigDecimal("200.00"))
-    _factors.put(VehicleType.VAN, new BigDecimal("120.00"))
-    _factors.put(VehicleType.MOTORCYCLE, new BigDecimal("-50.00"))
+    _factors.put(VehicleType.SUV, new BigDecimal("2000.00"))
+    _factors.put(VehicleType.TRUCK, new BigDecimal("3000.00"))
+    _factors.put(VehicleType.COUPE, new BigDecimal("4000.00"))
+    _factors.put(VehicleType.VAN, new BigDecimal("2400.00"))
+    _factors.put(VehicleType.MOTORCYCLE, new BigDecimal("-1000.00"))
   }
 
   /**

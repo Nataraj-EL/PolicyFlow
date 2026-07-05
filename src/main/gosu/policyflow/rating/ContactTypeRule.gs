@@ -19,7 +19,7 @@ public class ContactTypeRule implements RatingRule {
    */
   public construct() {
     _factors.put(ContactType.PERSON, new BigDecimal("0.00"))
-    _factors.put(ContactType.COMPANY, new BigDecimal("100.00"))
+    _factors.put(ContactType.COMPANY, new BigDecimal("2000.00"))
   }
 
   /**

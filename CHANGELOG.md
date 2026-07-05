@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Relational Integrity & Performance: Wired foreign key bindings linking tables together, and declared unique indexes on high-lookup columns (`email_address`, `vin`, `policy_number`, `claim_number`).
 - Transactional Boundary Control: Decorated REST API entrypoint controller classes with Spring `@Transactional` boundary annotations to guarantee transactional atomicity.
 - YAML Configuration Profiles: Replaced application properties with YAML-based Spring Profiles (`dev` for H2 file persistence, `prod` for cloud PostgreSQL).
+- Currency Localization: Transitioned currency representation from USD ($) to Indian Rupees (₹) across frontend components, utilizing a centralized format utility `formatCurrency` with Indian layout groupings.
+- Indian Default Mock States: Localized zip code, address, city, and state parameters in the premium calculator to realistic Indian defaults.
+- Realistic Premium Scaling: Multiplied all baseline premiums and underwriting adjustments in the Gosu config/rating rules by a factor of 20 to represent realistic Indian Rupee figures.
+- H2 Multi-Process Concurrency: Configured H2 connection parameters with `AUTO_SERVER=true` to enable concurrent connections from backend runtime and testing processes.
 
 ## [1.1.0] - 2026-07-04
 

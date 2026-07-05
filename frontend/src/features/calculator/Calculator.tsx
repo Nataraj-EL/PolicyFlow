@@ -5,6 +5,7 @@ import { useToast } from '../../context/ToastContext';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Calculator as CalcIcon, Receipt, CheckCircle } from 'lucide-react';
+import { formatCurrency } from '../../utils/format';
 
 export const Calculator: React.FC = () => {
   const calculateMutation = useCalculatePremium();
@@ -20,9 +21,9 @@ export const Calculator: React.FC = () => {
   const [make, setMake] = useState('Toyota');
   const [model, setModel] = useState('Camry');
   const [vin, setVin] = useState('1ABCDE2FGHIJKLMNO'); // dummy valid vin representation
-  const [city, setCity] = useState('New York');
-  const [state, setState] = useState('NY');
-  const [postalCode, setPostalCode] = useState('10001');
+  const [city, setCity] = useState('Chennai');
+  const [state, setState] = useState('Tamil Nadu');
+  const [postalCode, setPostalCode] = useState('600069');
 
   const handleCalculate = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,7 +34,7 @@ export const Calculator: React.FC = () => {
       lastName: contactType === 'PERSON' ? 'Customer' : undefined,
       companyName: contactType === 'COMPANY' ? 'Simulated Company' : undefined,
       emailAddress: 'simulated@policyflow.local',
-      addressLine1: '123 Rating Lane',
+      addressLine1: 'No. 12, Anna Main Road',
       city,
       state,
       postalCode,
@@ -60,13 +61,6 @@ export const Calculator: React.FC = () => {
         },
       }
     );
-  };
-
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(val);
   };
 
   const formatFactor = (val: number) => {

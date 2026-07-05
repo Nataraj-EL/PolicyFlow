@@ -34,6 +34,29 @@ public class RestApiIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private policyflow.repository.claim.ClaimHistoryRepository claimHistoryRepository;
+    @Autowired
+    private policyflow.repository.policy.PolicyHistoryRepository policyHistoryRepository;
+    @Autowired
+    private policyflow.repository.claim.ClaimRepository claimRepository;
+    @Autowired
+    private policyflow.repository.policy.PolicyRepository policyRepository;
+    @Autowired
+    private policyflow.repository.account.ContactRepository contactRepository;
+    @Autowired
+    private policyflow.repository.vehicle.VehicleRepository vehicleRepository;
+
+    @org.junit.jupiter.api.BeforeEach
+    public void setUp() {
+        claimHistoryRepository.clear();
+        policyHistoryRepository.clear();
+        claimRepository.clear();
+        policyRepository.clear();
+        contactRepository.clear();
+        vehicleRepository.clear();
+    }
+
     @Test
     public void testInfoAndHealthEndpoints() throws Exception {
         mockMvc.perform(get("/"))

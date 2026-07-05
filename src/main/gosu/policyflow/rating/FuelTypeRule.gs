@@ -20,8 +20,8 @@ public class FuelTypeRule implements RatingRule {
   public construct() {
     _discounts.put(FuelType.GASOLINE, new BigDecimal("0.00"))
     _discounts.put(FuelType.DIESEL, new BigDecimal("0.00"))
-    _discounts.put(FuelType.ELECTRIC, new BigDecimal("-50.00"))
-    _discounts.put(FuelType.HYBRID, new BigDecimal("-25.00"))
+    _discounts.put(FuelType.ELECTRIC, new BigDecimal("-1000.00"))
+    _discounts.put(FuelType.HYBRID, new BigDecimal("-500.00"))
   }
 
   /**
