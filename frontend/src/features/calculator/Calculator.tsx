@@ -71,7 +71,7 @@ export const Calculator: React.FC = () => {
     <div
       style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
         gap: '24px',
       }}
     >
@@ -82,7 +82,7 @@ export const Calculator: React.FC = () => {
           <h4 style={{ fontSize: '0.9rem', color: 'var(--color-brand)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             Driver Insured Info
           </h4>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="form-grid-2">
             <div className="form-group">
               <label>Insured Type</label>
               <select value={contactType} onChange={(e) => setContactType(e.target.value as 'PERSON' | 'COMPANY')}>
@@ -99,7 +99,7 @@ export const Calculator: React.FC = () => {
           <h4 style={{ fontSize: '0.9rem', color: 'var(--color-brand)', margin: '16px 0 12px 0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             Vehicle Details
           </h4>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="form-grid-2">
             <div className="form-group">
               <label>Manufacture Year</label>
               <input 
@@ -216,6 +216,20 @@ export const Calculator: React.FC = () => {
           </div>
         )}
       </Card>
+
+      <style>{`
+        .form-grid-2 {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+        }
+        @media (max-width: 600px) {
+          .form-grid-2 {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

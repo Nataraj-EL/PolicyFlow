@@ -61,6 +61,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
             padding: '24px',
             overflowY: 'auto',
           }}
+          className="main-content-responsive"
         >
           <div style={{ maxWidth: '1280px', margin: '0 auto', width: '100%' }}>
             {children}
@@ -74,6 +75,11 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         @media (min-width: 1024px) {
           .main-layout-responsive {
             margin-left: 260px;
+          }
+        }
+        @media (max-width: 768px) {
+          .main-content-responsive {
+            padding: 12px !important;
           }
         }
       `}</style>

@@ -260,7 +260,7 @@ export const Search: React.FC = () => {
                                 {c.status}
                               </span>
                             </td>
-                            <td>{c.description || 'N/A'}</td>
+                            <td className="wrap-text">{c.description || 'N/A'}</td>
                           </tr>
                         ))}
                       </tbody>

@@ -281,7 +281,7 @@ export const Vehicles: React.FC = () => {
             )}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="form-grid-2">
             <div className="form-group">
               <label>Vehicle Make *</label>
               <input
@@ -310,7 +310,7 @@ export const Vehicles: React.FC = () => {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="form-grid-2">
             <div className="form-group">
               <label>Manufacture Year *</label>
               <input
@@ -336,7 +336,7 @@ export const Vehicles: React.FC = () => {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="form-grid-2">
             <div className="form-group">
               <label>Body Type</label>
               <select value={vehicleType} onChange={(e) => setVehicleType(e.target.value)}>
@@ -384,6 +384,19 @@ export const Vehicles: React.FC = () => {
         </p>
       </Modal>
 
+      <style>{`
+        .form-grid-2 {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+        }
+        @media (max-width: 600px) {
+          .form-grid-2 {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

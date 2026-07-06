@@ -89,7 +89,7 @@ export const Dashboard: React.FC = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
           gap: '20px',
         }}
       >
@@ -160,7 +160,7 @@ export const Dashboard: React.FC = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
           gap: '24px',
         }}
       >

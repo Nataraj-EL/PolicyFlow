@@ -365,7 +365,7 @@ export const Policies: React.FC = () => {
             </select>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="form-grid-2">
             <div className="form-group">
               <label>Effective Date *</label>
               <input
@@ -485,6 +485,19 @@ export const Policies: React.FC = () => {
         )}
       </Modal>
 
+      <style>{`
+        .form-grid-2 {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+        }
+        @media (max-width: 600px) {
+          .form-grid-2 {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

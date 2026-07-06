@@ -320,7 +320,7 @@ export const Contacts: React.FC = () => {
           </div>
 
           {contactType === 'PERSON' ? (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div className="form-grid-2">
               <div className="form-group">
                 <label>First Name *</label>
                 <input
@@ -364,7 +364,7 @@ export const Contacts: React.FC = () => {
             </div>
           )}
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="form-grid-2">
             <div className="form-group">
               <label>Email Address *</label>
               <input
@@ -417,7 +417,7 @@ export const Contacts: React.FC = () => {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '12px' }}>
+          <div className="form-grid-3">
             <div className="form-group">
               <label>City *</label>
               <input
@@ -484,6 +484,24 @@ export const Contacts: React.FC = () => {
         </p>
       </Modal>
 
+      <style>{`
+        .form-grid-2 {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+        }
+        .form-grid-3 {
+          display: grid;
+          grid-template-columns: 2fr 1fr 1fr;
+          gap: 12px;
+        }
+        @media (max-width: 600px) {
+          .form-grid-2, .form-grid-3 {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

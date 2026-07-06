@@ -75,6 +75,7 @@ export const Modal: React.FC<ModalProps> = ({
             alignItems: 'center',
             justifyContent: 'space-between',
           }}
+          className="modal-header-responsive"
         >
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-text)' }}>
             {title}
@@ -100,7 +101,7 @@ export const Modal: React.FC<ModalProps> = ({
         </div>
 
         {/* Body */}
-        <div style={{ padding: '24px', overflowY: 'auto', flex: 1 }}>{children}</div>
+        <div style={{ padding: '24px', overflowY: 'auto', flex: 1 }} className="modal-body-responsive">{children}</div>
 
         {/* Footer */}
         {footer && (
@@ -113,6 +114,7 @@ export const Modal: React.FC<ModalProps> = ({
               justifyContent: 'flex-end',
               gap: '12px',
             }}
+            className="modal-footer-responsive"
           >
             {footer}
           </div>
@@ -123,6 +125,17 @@ export const Modal: React.FC<ModalProps> = ({
         .close-hover:hover {
           background-color: var(--color-muted);
           color: var(--color-text);
+        }
+        @media (max-width: 640px) {
+          .modal-header-responsive {
+            padding: 14px 16px !important;
+          }
+          .modal-body-responsive {
+            padding: 16px !important;
+          }
+          .modal-footer-responsive {
+            padding: 12px 16px !important;
+          }
         }
       `}</style>
     </div>

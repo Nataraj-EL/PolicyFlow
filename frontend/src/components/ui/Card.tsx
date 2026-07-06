@@ -41,6 +41,7 @@ export const Card: React.FC<CardProps> = ({
             justifyContent: 'space-between',
             gap: '12px',
           }}
+          className="card-header-responsive"
         >
           <div>
             {title && (
@@ -72,11 +73,25 @@ export const Card: React.FC<CardProps> = ({
       )}
 
       {/* Card Body */}
-      <div style={{ padding: '24px' }}>{children}</div>
+      <div style={{ padding: '24px' }} className="card-body-responsive">{children}</div>
 
       <style>{`
         .card-interactive:hover {
           box-shadow: var(--shadow-md);
+        }
+        @media (max-width: 640px) {
+          .card-header-responsive {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 16px !important;
+            padding: 16px !important;
+          }
+          .card-header-responsive > div:last-child {
+            width: 100%;
+          }
+          .card-body-responsive {
+            padding: 16px !important;
+          }
         }
       `}</style>
     </div>
